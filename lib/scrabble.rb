@@ -1,7 +1,37 @@
 class Scrabble
 
+  def score_letters(word)
+    word_array = word.split('')
+    @score_array = word_array.map do |letter|
+      point_values[letter.upcase]
+    end
+  end
+
   def score(word)
-    1
+    if word == nil
+      score = 0
+    else
+      score_letters(word)
+      score = @score_array.inject(0) do |sum, score|
+        sum += score
+      end
+    end
+    score
+  end
+
+  def score_with_multipliers(word, array, multiplier = 1)
+    score(word)
+    multiplied_array = []
+    @score_array.each_with_index do |score, index|
+      multiplied_array << (score * array[index])
+    end
+    score= multiplied_array.inject(0) do |sum, num|
+      sum += num
+    end
+    if @score_array.count >= 7
+      score += 10
+    end
+    score * multiplier
   end
 
   def point_values
